@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Program Keahlian — SMKN 1 Gondang</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --blush:      #F2B8C6;
+      --rose:       #E88FA3;
+      --dusty:      #D4607A;
+      --petal:      #FDE8EE;
+      --cream:      #FFF6F8;
+      --mauve:      #C4748A;
+      --soft-pink:  #F9D0DB;
+      --white:      #FFFFFF;
+      --ink:        #3D1F28;
+      --muted:      #8C5565;
+      --lilac:      #EDD5E8;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Jost', sans-serif;
+      background: var(--cream);
+      color: var(--ink);
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* CUSTOM CURSOR */
+    .cursor {
+      width: 14px; height: 14px;
+      border-radius: 50%;
+      background: var(--rose);
+      position: fixed; pointer-events: none; z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: transform .12s ease, width .2s, height .2s, background .2s;
+      mix-blend-mode: multiply;
+    }
+    .cursor-ring {
+      width: 36px; height: 36px;
+      border-radius: 50%; border: 1.5px solid var(--blush);
+      position: fixed; pointer-events: none; z-index: 9998;
+      transform: translate(-50%, -50%);
+      transition: left .08s ease, top .08s ease;
+    }
+
+    /* FLOATING PETALS BG */
+    .petals-bg {
+      position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden;
+    }
+    .petal {
+      position: absolute;
+      width: 8px; height: 12px;
+      background: var(--blush);
+      border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+      opacity: 0.35;
+      animation: petalFall linear infinite;
+    }
+    @keyframes petalFall {
+      0%   { transform: translateY(-40px) rotate(0deg) translateX(0); opacity: 0; }
+      10%  { opacity: 0.35; }
+      90%  { opacity: 0.2; }
+      100% { transform: translateY(110vh) rotate(360deg) translateX(60px); opacity: 0; }
+    }
+
+    /* NAVBAR */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(255,246,248,0.88);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--soft-pink);
+      padding: 14px 48px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-brand { display: flex; align-items: center; gap: 14px; }
+    .nav-logo-wrap {
+      width: 46px; height: 46px; border-radius: 50%;
+      border: 2px solid var(--blush);
+      overflow: hidden;
+      box-shadow: 0 0 0 4px var(--soft-pink);
+    }
+    .nav-logo-wrap img { width: 100%; height: 100%; object-fit: cover; }
+    .nav-title { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; font-weight: 700; color: var(--dusty); }
+    .nav-sub { font-size: 0.7rem; color: var(--muted); }
+    .nav-links { display: flex; gap: 30px; }
+    .nav-links a {
+      font-size: 0.82rem; font-weight: 500; color: var(--muted);
+      text-decoration: none; letter-spacing: .03em;
+      transition: color .2s;
+    }
+    .nav-links a:hover { color: var(--dusty); }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      position: relative;
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
+      padding: 120px 24px 80px;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background: linear-gradient(160deg, #FDE8EE 0%, #F9D0DB 35%, #EDD5E8 70%, #FDE8EE 100%);
+    }
+    /* decorative circles */
+    .hero-circle {
+      position: absolute; border-radius: 50%;
+      background: rgba(242,184,198,0.25);
+      animation: breathe 7s ease-in-out infinite;
+    }
+    .hero-circle.c1 { width:500px; height:500px; top:-120px; right:-100px; animation-delay:0s; }
+    .hero-circle.c2 { width:300px; height:300px; bottom:-60px; left:-60px; animation-delay:2.5s; }
+    .hero-circle.c3 { width:180px; height:180px; top:30%; left:8%; animation-delay:4s; }
+    @keyframes breathe {
+      0%,100% { transform: scale(1); }
+      50%      { transform: scale(1.08); }
+    }
+
+    .hero-content {
+      position: relative; z-index: 2; text-align: center; max-width: 720px;
+      animation: fadeUp .9s ease both;
+    }
+    @keyframes fadeUp {
+      from { opacity:0; transform: translateY(32px); }
+      to   { opacity:1; transform: none; }
+    }
+
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--white); border: 1px solid var(--blush);
+      border-radius: 50px; padding: 6px 18px;
+      font-size: 0.75rem; font-weight: 600; letter-spacing: .1em;
+      text-transform: uppercase; color: var(--mauve);
+      margin-bottom: 28px;
+      box-shadow: 0 4px 14px rgba(228,143,163,0.15);
+    }
+    .hero-eyebrow::before { content: '🌸'; }
+
+    .hero h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.8rem, 7vw, 5rem);
+      font-weight: 700; line-height: 1.05;
+      color: var(--ink); margin-bottom: 8px;
+    }
+    .hero h1 em {
+      font-style: italic; color: var(--dusty);
+    }
+    .hero-tagline {
+      font-size: 1rem; color: var(--muted);
+      line-height: 1.8; margin: 18px auto 40px;
+      max-width: 500px; font-weight: 300;
+    }
+
+    /* STATS PILLS */
+    .hero-pills {
+      display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;
+    }
+    .pill {
+      background: var(--white);
+      border: 1px solid var(--blush);
+      border-radius: 60px; padding: 12px 28px;
+      box-shadow: 0 6px 20px rgba(228,143,163,0.12);
+      text-align: center;
+      transition: transform .2s, box-shadow .2s;
+    }
+    .pill:hover { transform: translateY(-3px); box-shadow: 0 10px 28px rgba(228,143,163,0.22); }
+    .pill-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2rem; font-weight: 700; color: var(--dusty); line-height: 1;
+    }
+    .pill-label { font-size: 0.7rem; color: var(--muted); margin-top: 2px; letter-spacing: .05em; }
+
+    /* SCROLL INDICATOR */
+    .scroll-hint {
+      position: absolute; bottom: 36px; left: 50%;
+      transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 6px;
+      font-size: 0.7rem; color: var(--muted); letter-spacing: .1em; text-transform: uppercase;
+      animation: bounce 2s ease-in-out infinite;
+    }
+    .scroll-hint::after {
+      content: '';
+      width: 1px; height: 40px;
+      background: linear-gradient(to bottom, var(--blush), transparent);
+    }
+    @keyframes bounce {
+      0%,100% { transform: translateX(-50%) translateY(0); }
+      50%      { transform: translateX(-50%) translateY(6px); }
+    }
+
+    /* SECTIONS */
+    section { padding: 90px 24px; position: relative; z-index: 1; }
+    .container { max-width: 1100px; margin: 0 auto; }
+
+    .section-kicker {
+      font-size: 0.7rem; font-weight: 600; letter-spacing: .18em;
+      text-transform: uppercase; color: var(--rose); margin-bottom: 10px;
+    }
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2rem, 4vw, 3rem);
+      color: var(--ink); font-weight: 700; margin-bottom: 14px;
+    }
+    .section-desc { color: var(--muted); font-size: .97rem; line-height: 1.75; max-width: 560px; }
+    .deco-line {
+      width: 48px; height: 3px;
+      background: linear-gradient(90deg, var(--rose), var(--blush));
+      border-radius: 2px; margin: 14px 0 44px;
+    }
+
+    /* BIODATA */
+    .biodata { background: var(--white); }
+    .bio-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px;
+    }
+    .bio-card {
+      background: var(--petal);
+      border: 1px solid var(--soft-pink);
+      border-radius: 18px; padding: 22px 26px;
+      display: flex; gap: 16px; align-items: flex-start;
+      transition: transform .25s, box-shadow .25s;
+    }
+    .bio-card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(228,143,163,0.16); }
+    .bio-icon-wrap {
+      width: 44px; height: 44px; border-radius: 12px;
+      background: linear-gradient(135deg, var(--blush), var(--rose));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.15rem; flex-shrink: 0;
+    }
+    .bio-info-label { font-size: 0.68rem; color: var(--muted); font-weight: 500; margin-bottom: 4px; text-transform: uppercase; letter-spacing: .06em; }
+    .bio-info-val { font-size: 0.9rem; font-weight: 600; color: var(--ink); }
+
+    /* PROGRAM KEAHLIAN */
+    .prodi { background: var(--cream); }
+    .prodi-masonry {
+      columns: 3 300px; gap: 22px;
+      margin-top: 44px;
+    }
+    .prodi-card {
+      break-inside: avoid;
+      margin-bottom: 22px;
+      background: var(--white);
+      border-radius: 22px;
+      overflow: hidden;
+      border: 1px solid var(--soft-pink);
+      box-shadow: 0 4px 18px rgba(228,143,163,0.08);
+      transition: transform .3s, box-shadow .3s;
+      position: relative;
+    }
+    .prodi-card:hover {
+      transform: translateY(-6px) rotate(-0.4deg);
+      box-shadow: 0 18px 40px rgba(228,143,163,0.22);
+    }
+    .prodi-card:nth-child(even):hover { rotate: 0.4deg; }
+    .prodi-img-wrap { position: relative; overflow: hidden; }
+    .prodi-img {
+      width: 100%; display: block;
+      object-fit: cover;
+      transition: transform .5s ease;
+    }
+    .prodi-card:hover .prodi-img { transform: scale(1.06); }
+    .prodi-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(61,31,40,0.45) 0%, transparent 60%);
+    }
+    .prodi-badge-float {
+      position: absolute; top: 14px; left: 14px;
+      background: var(--white);
+      color: var(--dusty); font-size: 0.68rem; font-weight: 700;
+      letter-spacing: .08em; text-transform: uppercase;
+      padding: 5px 14px; border-radius: 50px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    .prodi-body { padding: 22px 24px 26px; }
+    .prodi-body h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem; font-weight: 700; color: var(--ink); margin-bottom: 8px;
+    }
+    .prodi-body p { font-size: 0.82rem; color: var(--muted); line-height: 1.7; margin-bottom: 14px; }
+    .prodi-tag {
+      display: inline-block;
+      background: var(--petal); color: var(--mauve);
+      font-size: 0.7rem; font-weight: 600;
+      padding: 4px 14px; border-radius: 50px;
+      border: 1px solid var(--blush);
+    }
+
+    /* CONTACT */
+    .contact { background: var(--white); }
+    .contact-wrap {
+      background: linear-gradient(135deg, #F2B8C6 0%, #EDD5E8 50%, #F9D0DB 100%);
+      border-radius: 28px; padding: 60px 52px;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 52px; align-items: center;
+      position: relative; overflow: hidden;
+    }
+    .contact-wrap::before {
+      content: '✿';
+      position: absolute; font-size: 200px; opacity: 0.07;
+      right: -20px; bottom: -40px; color: var(--dusty);
+    }
+    .contact-wrap h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.2rem; color: var(--ink); margin-bottom: 14px;
+    }
+    .contact-wrap p { color: var(--muted); line-height: 1.75; font-size: 0.95rem; }
+    .contact-cards { display: flex; flex-direction: column; gap: 14px; }
+    .contact-card {
+      background: rgba(255,255,255,0.7);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.9);
+      border-radius: 16px; padding: 16px 20px;
+      display: flex; gap: 14px; align-items: center;
+      transition: transform .2s, box-shadow .2s;
+    }
+    .contact-card:hover { transform: translateX(6px); box-shadow: 0 8px 24px rgba(228,143,163,0.2); }
+    .cc-icon {
+      width: 40px; height: 40px; border-radius: 12px;
+      background: var(--white); display: flex;
+      align-items: center; justify-content: center;
+      font-size: 1rem; flex-shrink: 0;
+      box-shadow: 0 2px 10px rgba(228,143,163,0.2);
+    }
+    .cc-label { font-size: 0.68rem; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
+    .cc-val { font-size: 0.88rem; font-weight: 600; color: var(--ink); }
+
+    /* FOOTER */
+    footer {
+      background: var(--ink);
+      text-align: center; padding: 36px 24px;
+    }
+    .footer-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.4rem; color: var(--blush);
+      margin-bottom: 8px;
+    }
+    .footer-info {
+      font-size: 0.8rem; color: rgba(255,255,255,0.4);
+      line-height: 1.9;
+    }
+    .footer-info a { color: var(--blush); text-decoration: none; }
+    .footer-madeby {
+      margin-top: 18px;
+      font-size: 0.75rem; color: rgba(255,255,255,0.25);
+      font-style: italic;
+    }
+    .footer-madeby span {
+      color: var(--blush); font-style: normal; font-weight: 600;
+    }
+    .footer-hearts {
+      margin-top: 10px; font-size: 1rem;
+      animation: heartbeat 1.5s ease-in-out infinite;
+    }
+    @keyframes heartbeat {
+      0%,100% { transform: scale(1); }
+      50%      { transform: scale(1.2); }
+    }
+
+    /* SCROLL REVEAL */
+    .reveal { opacity:0; transform: translateY(28px); transition: opacity .65s ease, transform .65s ease; }
+    .reveal.visible { opacity:1; transform: none; }
+
+    @media (max-width: 768px) {
+      nav { padding: 12px 20px; }
+      .nav-links { display: none; }
+      .bio-grid { grid-template-columns: 1fr; }
+      .contact-wrap { grid-template-columns: 1fr; padding: 36px 24px; }
+      .prodi-masonry { columns: 1; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- CUSTOM CURSOR -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- FLOATING PETALS -->
+<div class="petals-bg" id="petalsContainer"></div>
+
+<!-- NAVBAR -->
+<nav>
+  <div class="nav-brand">
+    <div class="nav-logo-wrap">
+      <img src="https://raw.githubusercontent.com/seravinar06-maker/ratih/main/logo.jpeg" alt="Logo" onerror="this.style.display='none'"/>
+    </div>
+    <div>
+      <div class="nav-title">SMKN 1 Gondang</div>
+      <div class="nav-sub">Nganjuk, Jawa Timur</div>
+    </div>
+  </div>
+  <div class="nav-links">
+    <a href="#profil">Profil</a>
+    <a href="#prodi">Program Keahlian</a>
+    <a href="#kontak">Kontak</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-circle c1"></div>
+  <div class="hero-circle c2"></div>
+  <div class="hero-circle c3"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">SMK Negeri 1 Gondang</div>
+    <h1>Program<br/><em>Keahlian</em><br/>Unggulan</h1>
+    <p class="hero-tagline">Membentuk generasi terampil, berkarakter, dan siap berkarya<br/>di Kabupaten Nganjuk, Jawa Timur.</p>
+    <div class="hero-pills">
+      <div class="pill"><div class="pill-num">42</div><div class="pill-label">Rombel</div></div>
+      <div class="pill"><div class="pill-num">8</div><div class="pill-label">Program Keahlian</div></div>
+      <div class="pill"><div class="pill-num">NPSN</div><div class="pill-label">20312896</div></div>
+    </div>
+  </div>
+  <div class="scroll-hint">scroll</div>
+</section>
+
+<!-- PROFIL -->
+<section class="biodata" id="profil">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-kicker">🌸 Tentang Kami</div>
+      <h2 class="section-title">Profil Sekolah</h2>
+      <p class="section-desc">SMK Negeri 1 Gondang adalah sekolah menengah kejuruan negeri yang berlokasi di Kecamatan Gondang, Kabupaten Nganjuk, Jawa Timur.</p>
+      <div class="deco-line"></div>
+    </div>
+    <div class="bio-grid reveal">
+      <div class="bio-card">
+        <div class="bio-icon-wrap">🏫</div>
+        <div><div class="bio-info-label">Nama Sekolah</div><div class="bio-info-val">SMK Negeri 1 Gondang</div></div>
+      </div>
+      <div class="bio-card">
+        <div class="bio-icon-wrap">🔢</div>
+        <div><div class="bio-info-label">NPSN</div><div class="bio-info-val">20312896</div></div>
+      </div>
+      <div class="bio-card">
+        <div class="bio-icon-wrap">📍</div>
+        <div><div class="bio-info-label">Alamat</div><div class="bio-info-val">Jl. Raya Gondang-Lengkong, Balongrejo, Balong Gebang, Gondang, Nganjuk 64451</div></div>
+      </div>
+      <div class="bio-card">
+        <div class="bio-icon-wrap">🗺️</div>
+        <div><div class="bio-info-label">Provinsi</div><div class="bio-info-val">Jawa Timur</div></div>
+      </div>
+      <div class="bio-card">
+        <div class="bio-icon-wrap">📞</div>
+        <div><div class="bio-info-label">Kontak</div><div class="bio-info-val">(0358) 611606</div></div>
+      </div>
+      <div class="bio-card">
+        <div class="bio-icon-wrap">🌐</div>
+        <div><div class="bio-info-label">Website</div><div class="bio-info-val">smkn1gondang-nganjuk.sch.id</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROGRAM KEAHLIAN -->
+<section class="prodi" id="prodi">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-kicker">🌷 Program Keahlian</div>
+      <h2 class="section-title">Jurusan Kami</h2>
+      <p class="section-desc">Delapan program keahlian dirancang untuk mempersiapkan siswa memasuki dunia kerja dan industri secara profesional.</p>
+      <div class="deco-line"></div>
+    </div>
+    <div class="prodi-masonry">
+
+      <div class="prodi-card reveal">
+        <div class="prodi-img-wrap">
+          <img class="prodi-img" src="https://raw.githubusercontent.com/seravinar06-maker/ratih/main/tkr.jpeg" alt="TKR" style="height:180px" onerror="this.src='https://placehold.co/400x180/F2B8C6/fff?text=TKR'"/>
+          <div class="prodi-overlay"></div>
+          <span class="prodi-badge-float">TKR</span>
+        </div>
+        <div class="prodi-body">
+          <h3>Teknik Kendaraan Ringan</h3>
+          <p>Perawatan, perbaikan, dan diagnosa kendaraan ringan bermesin bensin maupun diesel secara modern.</p>
+          <span class="prodi-tag">Otomotif</span>
+        </div>
+      </div>
+
+      <div class="prodi-card reveal">
+        <div class="prodi-img-wrap">
+          <img class="prodi-img" src="https://raw.githubusercontent.com/seravinar06-maker/ratih/main/tsm.jpeg" alt="TSM" style="height:220px" onerror="this.src='https://placehold.co/400x220/E88FA3/fff?text=TSM'"/>
+          <div class="prodi-overlay"></div>
+          <span class="prodi-badge-float">TSM</span>
+        </div>
+        <div class="prodi-body">
+          <h3>Teknik Sepeda Motor</h3>
+          <p>Kompetensi perawatan dan perbaikan sepeda motor dari sistem bahan bakar, kelistrikan, hingga transmisi.</p>
+          <span class="prodi-tag">Otomotif</span>
+        </div>
+      </div>
+
+      <div class="prodi-card reveal">
+        <div class="prodi-img-wrap">
+          <img class="prodi-img" src="https://raw.githubusercontent.com/seravinar06-maker/ratih/main/atph.jpeg" alt="ATPH" style="height:200px" onerror="this.src='https://placehold.co/400x200/D4607A/fff?text=ATPH'"/>
+          <div class="prodi-overlay"></div>
+          <span class="prodi-badge-float">ATPH</span>
+        </div>
+        <div class="prodi-body">
+          <h3>Agribisnis Tanaman Pangan & Hortikultura</h3>
+          <p>Budidaya tanaman pangan dan hortikultura berbasis pertanian modern dan berkelanjutan.</p>
+          <span class="prodi-tag">Pertanian</span>
+        </div>
+      </div>
+
+      <div class="prodi-card reveal">
+        <div class="prodi-img-wrap">
+          <img class="prodi-img" src="https://raw.githubusercontent.com/seravinar06-maker/ratih/main/tkj.jpeg" alt="TKJ" style="height:200px" onerror="this.src='https://placehold.co/400x200/F2B8C6/fff?text=TKJ'"/>
+          <div class="prodi-overlay"></div>
+          <span class="prodi-badge-float">TKJ</span>
+        </div>
+        <div class="prodi-body">
+          <h3>Teknik Komputer & Jaringan</h3>
+          <p>Instalasi jaringan komputer, administrasi server, keamanan siber, dan troubleshooting perangkat keras & lunak.</p>
+          <span class="prodi-tag">Teknologi Informasi</span>
+        </div>
+      </div>
+
+      <div class="prodi-card reveal">
+        <div class="prodi-img-wrap">
+          <img class="prodi-img" src="https://raw.githubusercontent.com/seravinar06-maker/ratih/main/mp.jpeg" alt="MP" style="height:180px" onerror="this.src='https://placehold.co/400x180/E88FA3/fff?text=MP'"/>
+          <div class="prodi-overlay"></div>
+          <span class="prodi-badge-float">MP</span>
+        </div>
+        <div class="prodi-body">
+          <h3>Manajemen Perkantoran</h3>
+          <p>Administrasi perkantoran, korespondensi bisnis, manajemen arsip, dan otomasi kantor berbasis teknologi.</p>
+          <span class="prodi-tag">Bisnis & Manajemen</span>
+        </div>
+      </div>
+
+      <div class="prodi-card reveal">
+        <div class="prodi-img-wrap">
+          <img class="prodi-img" src="https://raw.githubusercontent.com/seravinar06-maker/ratih/main/atu.jpeg" alt="ATU" style="height:210px" onerror="this.src='https://placehold.co/400x210/D4607A/fff?text=ATU'"/>
+          <div class="prodi-overlay"></div>
+          <span class="prodi-badge-float">ATU</span>
+        </div>
+        <div class="prodi-body">
+          <h3>Agribisnis Ternak Unggas</h3>
+          <p>Budidaya, manajemen kesehatan, dan pengolahan hasil ternak unggas secara profesional dan berwawasan lingkungan.</p>
+          <span class="prodi-tag">Pertanian</span>
+        </div>
+      </div>
+
+      <div class="prodi-card reveal">
+        <div class="prodi-img-wrap">
+          <img class="prodi-img" src="https://raw.githubusercontent.com/seravinar06-maker/ratih/main/aphp.jpeg" alt="APHP" style="height:190px" onerror="this.src='https://placehold.co/400x190/F2B8C6/fff?text=APHP'"/>
+          <div class="prodi-overlay"></div>
+          <span class="prodi-badge-float">APHP</span>
+        </div>
+        <div class="prodi-body">
+          <h3>Agribisnis Pengolahan Hasil Pertanian</h3>
+          <p>Teknologi pengolahan pangan, pengendalian mutu produk pertanian, dan kewirausahaan agribisnis modern.</p>
+          <span class="prodi-tag">Pertanian</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- KONTAK -->
+<section class="contact" id="kontak">
+  <div class="container">
+    <div class="contact-wrap reveal">
+      <div>
+        <h2>Mari Terhubung Bersama Kami 🌸</h2>
+        <p>Tertarik bergabung atau ingin mengetahui lebih lanjut tentang program keahlian kami? Kami siap membantu kamu menemukan jurusan yang tepat.</p>
+      </div>
+      <div class="contact-cards">
+        <div class="contact-card">
+          <div class="cc-icon">📞</div>
+          <div><div class="cc-label">Telepon</div><div class="cc-val">(0358) 611606</div></div>
+        </div>
+        <div class="contact-card">
+          <div class="cc-icon">📍</div>
+          <div><div class="cc-label">Alamat</div><div class="cc-val">Jl. Raya Gondang-Lengkong, Gondang, Nganjuk 64451</div></div>
+        </div>
+        <div class="contact-card">
+          <div class="cc-icon">🌐</div>
+          <div><div class="cc-label">Website</div><div class="cc-val">smkn1gondang-nganjuk.sch.id</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">SMK Negeri 1 Gondang</div>
+  <div class="footer-info">
+    Nganjuk, Jawa Timur &nbsp;·&nbsp; NPSN: 20312896<br/>
+    (0358) 611606 &nbsp;·&nbsp; <a href="#">smkn1gondang-nganjuk.sch.id</a>
+  </div>
+  <div class="footer-madeby">dibuat oleh <span>revi aryanti</span></div>
+  <div class="footer-hearts">🌸</div>
+</footer>
+
+<script>
+  // Custom cursor
+  const cursor = document.getElementById('cursor');
+  const ring   = document.getElementById('cursorRing');
+  let mx=0, my=0, rx=0, ry=0;
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    cursor.style.left = mx + 'px';
+    cursor.style.top  = my + 'px';
+  });
+  function animRing() {
+    rx += (mx - rx) * 0.12;
+    ry += (my - ry) *.12;
+    ring.style.left = rx + 'px';
+    ring.style.top  = ry + 'px';
+    requestAnimationFrame(animRing);
+  }
+  animRing();
+
+  // Petals
+  const container = document.getElementById('petalsContainer');
+  for (let i = 0; i < 18; i++) {
+    const p = document.createElement('div');
+    p.className = 'petal';
+    p.style.cssText = `
+      left: ${Math.random()*100}%;
+      width: ${6 + Math.random()*8}px;
+      height: ${10 + Math.random()*8}px;
+      animation-duration: ${8 + Math.random()*10}s;
+      animation-delay: ${Math.random()*12}s;
+      background: hsl(${340 + Math.random()*30}, 80%, ${80 + Math.random()*10}%);
+      opacity: ${0.2 + Math.random()*0.25};
+    `;
+    container.appendChild(p);
+  }
+
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 90);
+        obs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.08 });
+  reveals.forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
